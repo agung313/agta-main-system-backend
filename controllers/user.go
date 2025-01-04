@@ -1,10 +1,58 @@
 package controllers
 
 import (
+	"time"
+
 	"github.com/agung313/agta-main-system-backend/config"
 	"github.com/agung313/agta-main-system-backend/models"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
+	"golang.org/x/crypto/bcrypt"
 )
+
+func Login(c *fiber.Ctx) error {
+	var input struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	if err := c.BodyParser(&input); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Invalid input",
+		})
+	}
+
+	var user models.User
+	result := config.DB.Where("email = ?", input.Email).First(&user)
+	if result.Error != nil {
+		return c.Status(401).JSON(fiber.Map{
+			"message": "Invalid email or password",
+		})
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
+		return c.Status(401).JSON(fiber.Map{
+			"message": "Invalid email or password",
+		})
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not login",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Login successful",
+		"token":   tokenString,
+	})
+}
 
 func GetUsers(c *fiber.Ctx) error {
 	var users []models.User
