@@ -10,6 +10,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+// auth controller >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
 func Login(c *fiber.Ctx) error {
 	var input struct {
 		Email    string `json:"email"`
@@ -38,7 +40,7 @@ func Login(c *fiber.Ctx) error {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
-		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+		"exp":     time.Now().Add(time.Hour * 24).Unix(),
 	})
 
 	tokenString, err := token.SignedString([]byte("secret"))
@@ -53,6 +55,105 @@ func Login(c *fiber.Ctx) error {
 		"token":   tokenString,
 	})
 }
+
+func SignUp(c *fiber.Ctx) error {
+	user := new(models.User)
+	if err := c.BodyParser(user); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	if user.Role != "superAdmin" {
+		user.Role = "visiting"
+	}
+	result := config.DB.Create(user)
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": result.Error.Error(),
+		})
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"exp":     time.Now().Add(time.Hour * 72).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte("secret"))
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not create user",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Success create new user",
+		"data":    user,
+		"token":   tokenString,
+	})
+}
+
+func Logout(c *fiber.Ctx) error {
+	token := c.Get("Authorization")
+	if token == "" {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "No token provided",
+		})
+	}
+
+	// Remove "Bearer " prefix from token
+	if len(token) > 7 && token[:7] == "Bearer " {
+		token = token[7:]
+	}
+
+	var existingToken models.Blacklist
+	result := config.DB.Where("token = ?", token).First(&existingToken)
+	if result.RowsAffected > 0 {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Token already blacklisted",
+		})
+	}
+
+	blacklistToken := models.Blacklist{Token: token}
+	result = config.DB.Create(&blacklistToken)
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not blacklist token",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Logout successful",
+	})
+}
+
+func GetBlacklistTokens(c *fiber.Ctx) error {
+	var blacklistTokens []models.Blacklist
+	result := config.DB.Find(&blacklistTokens)
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": result.Error,
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message": "Success get all blacklist tokens",
+		"total":   result.RowsAffected,
+		"data":    blacklistTokens,
+	})
+}
+
+func DeleteAllBlacklistTokens(c *fiber.Ctx) error {
+	result := config.DB.Where("1 = 1").Delete(&models.Blacklist{})
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": result.Error,
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message": "Success deleted all blacklist tokens",
+		"total":   result.RowsAffected,
+	})
+}
+
+// user controller >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 func GetUsers(c *fiber.Ctx) error {
 	var users []models.User

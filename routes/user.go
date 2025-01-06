@@ -9,8 +9,24 @@ import (
 func SetupUserRoutes(app *fiber.App) {
 	api := app.Group("/api")
 
+	// aut routes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+	// signup
+	api.Post("/signup", controllers.SignUp)
+
 	// login
 	api.Post("/login", controllers.Login)
+
+	// logout
+	api.Post("/logout", controllers.Logout)
+
+	// get blacklist token
+	api.Get("/blacklist", middleware.JWTProtected(), controllers.GetBlacklistTokens)
+
+	// DELTE BLACKLIST TOKEN
+	api.Delete("/blacklist", middleware.JWTProtected(), controllers.DeleteAllBlacklistTokens)
+
+	// user routes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 	// get all users
 	api.Get("/users", middleware.JWTProtected(), controllers.GetUsers)
@@ -44,4 +60,5 @@ func SetupUserRoutes(app *fiber.App) {
 
 	// permanent delete all users
 	api.Delete("/users/permanent", middleware.JWTProtected(), controllers.PermanentDeleteAllUsers)
+
 }

@@ -3,6 +3,8 @@ package middleware
 import (
 	"log"
 
+	"github.com/agung313/agta-main-system-backend/config"
+	"github.com/agung313/agta-main-system-backend/models"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -29,6 +31,18 @@ func JWTProtected() fiber.Handler {
 			return c.Status(401).JSON(fiber.Map{
 				"message": "Invalid or expired JWT",
 			})
+		}
+
+		// Check if token is blacklisted
+		var tokens []models.Blacklist
+		config.DB.Find(&tokens)
+
+		for _, t := range tokens {
+			if t.Token == tokenString {
+				return c.Status(401).JSON(fiber.Map{
+					"message": "Token is blacklisted",
+				})
+			}
 		}
 
 		c.Locals("user", token.Claims)

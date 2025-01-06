@@ -28,10 +28,11 @@ func main() {
 
 	// Database
 	config.ConnectDatabase()
-	config.DB.AutoMigrate(&models.User{})
+	config.DB.AutoMigrate(&models.User{}, &models.Slogan{}, &models.Blacklist{})
 
 	// Routes
 	routes.SetupUserRoutes(app)
+	routes.SetupSloganRoutes(app)
 
 	port := os.Getenv("APP_PORT")
 	log.Fatal(app.Listen(":" + port))
