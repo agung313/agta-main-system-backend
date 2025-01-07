@@ -6,6 +6,20 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+func GetVisitors(c *fiber.Ctx) error {
+	var visitors []models.Visitor
+	result := config.DB.Find(&visitors)
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not retrieve visitors",
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message":  "Success",
+		"visitors": visitors,
+	})
+}
+
 func CreateVisitor(c *fiber.Ctx) error {
 	visitor := new(models.Visitor)
 	if err := c.BodyParser(visitor); err != nil {

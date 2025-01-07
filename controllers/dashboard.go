@@ -27,10 +27,10 @@ func GetDashboardAdmin(c *fiber.Ctx) error {
 	totalVisitors := result.RowsAffected
 	totalMessages := resultMessages.RowsAffected
 
-	// Calculate totalLocation
-	var locations []string
-	config.DB.Model(&models.Visitor{}).Distinct("location").Pluck("location", &locations)
-	totalLocation := len(locations)
+	// Calculate totalCountries
+	var Countries []string
+	config.DB.Model(&models.Visitor{}).Distinct("countries").Pluck("countries", &Countries)
+	totalCountries := len(Countries)
 
 	// Filter data by year and month
 	data := make(map[int][]map[string]interface{})
@@ -70,10 +70,10 @@ func GetDashboardAdmin(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"message":        "Success get all visitors",
-		"totalVisitors":  totalVisitors,
-		"totalMessages":  totalMessages,
-		"totalLocations": totalLocation,
-		"data":           data,
+		"message":         "Success get all visitors",
+		"totalVisitors":   totalVisitors,
+		"totalMessages":   totalMessages,
+		"totalCountriess": totalCountries,
+		"data":            data,
 	})
 }
