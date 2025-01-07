@@ -37,6 +37,7 @@ func main() {
 		&models.Contacts{},
 		&models.Service{},
 		&models.TechnologyList{},
+		&models.Message{},
 	)
 
 	// Routes
@@ -45,6 +46,7 @@ func main() {
 	routes.SetupAboutsRoutes(app)
 	routes.SetupContactsRoutes(app)
 	routes.SetupServicesRoutes(app)
+	routes.SetupMessagesRoutes(app)
 	routes.UploadRoute(app)
 
 	port := os.Getenv("APP_PORT")
