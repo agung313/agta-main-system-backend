@@ -63,8 +63,16 @@ func SignUp(c *fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
+
+	var existingUser models.User
+	if err := config.DB.Where("email = ?", user.Email).First(&existingUser).Error; err == nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Email already exists",
+		})
+	}
+
 	if user.Role != "superAdmin" {
-		user.Role = "visiting"
+		user.Role = "visitor"
 	}
 	result := config.DB.Create(user)
 	if result.Error != nil {
@@ -207,8 +215,17 @@ func CreateUser(c *fiber.Ctx) error {
 			"message": err.Error(),
 		})
 	}
+
+	// Check if the email already exists
+	var existingUser models.User
+	if err := config.DB.Where("email = ?", user.Email).First(&existingUser).Error; err == nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Email already exists",
+		})
+	}
+
 	if user.Role != "superAdmin" {
-		user.Role = "visiting"
+		user.Role = "visitor"
 	}
 	result := config.DB.Create(user)
 	if result.Error != nil {
