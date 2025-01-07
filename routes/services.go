@@ -16,5 +16,5 @@ func SetupServicesRoutes(app *fiber.App) {
 	api.Put("/services", middleware.JWTProtected(), controllers.CreateOrUpdateServices)
 
 	// delete services
-	api.Delete("/services", middleware.JWTProtected(), controllers.DeleteAllServies)
+	api.Delete("/services", middleware.JWTProtected(), controllers.DeleteAllServices)
 }

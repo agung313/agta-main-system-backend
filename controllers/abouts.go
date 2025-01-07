@@ -89,7 +89,7 @@ func CreateOrUpdateAbouts(c *fiber.Ctx) error {
 
 func DeleteAllAbouts(c *fiber.Ctx) error {
 	// Hapus semua ComitmentLists terlebih dahulu
-	result := config.DB.Where("about_id > 0").Delete(&models.ComitmentList{})
+	result := config.DB.Unscoped().Where("about_id > 0").Delete(&models.ComitmentList{})
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": "Could not delete comitment lists",
@@ -98,7 +98,7 @@ func DeleteAllAbouts(c *fiber.Ctx) error {
 	}
 
 	// Hapus semua Abouts
-	result = config.DB.Where("id > 0").Delete(&models.About{})
+	result = config.DB.Unscoped().Where("id > 0").Delete(&models.About{})
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": "Could not delete abouts",

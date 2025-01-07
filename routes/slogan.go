@@ -14,4 +14,7 @@ func SetupSloganRoutes(app *fiber.App) {
 
 	// create slogan
 	api.Put("/slogan", middleware.JWTProtected(), controllers.CreateOrUpdateSlogan)
+
+	// delete slogan
+	api.Delete("/slogan", middleware.JWTProtected(), controllers.DeleteSlogan)
 }

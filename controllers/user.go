@@ -141,14 +141,14 @@ func GetBlacklistTokens(c *fiber.Ctx) error {
 }
 
 func DeleteAllBlacklistTokens(c *fiber.Ctx) error {
-	result := config.DB.Where("1 = 1").Delete(&models.Blacklist{})
+	result := config.DB.Unscoped().Where("1 = 1").Delete(&models.Blacklist{})
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": result.Error,
 		})
 	}
 	return c.JSON(fiber.Map{
-		"message": "Success deleted all blacklist tokens",
+		"message": "Success permanently deleted all blacklist tokens",
 		"total":   result.RowsAffected,
 	})
 }

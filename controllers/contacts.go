@@ -75,7 +75,7 @@ func DeleteContacts(c *fiber.Ctx) error {
 			"message": "No contacts found",
 		})
 	}
-	result = config.DB.Delete(&contacts)
+	result = config.DB.Unscoped().Delete(&contacts)
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": "Could not delete contacts",

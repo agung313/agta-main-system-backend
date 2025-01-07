@@ -63,3 +63,23 @@ func CreateOrUpdateSlogan(c *fiber.Ctx) error {
 		"message": "Update slogan success",
 	})
 }
+
+func DeleteSlogan(c *fiber.Ctx) error {
+	var slogan models.Slogan
+	if err := config.DB.First(&slogan).Error; err != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"message": "Slogan not found",
+		})
+	}
+
+	if err := config.DB.Unscoped().Delete(&slogan).Error; err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not delete slogan",
+			"error":   err.Error(),
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Delete slogan success",
+	})
+}

@@ -88,9 +88,9 @@ func CreateOrUpdateServices(c *fiber.Ctx) error {
 	})
 }
 
-func DeleteAllServies(c *fiber.Ctx) error {
-	// Hapus semua ComitmentLists terlebih dahulu
-	result := config.DB.Where("service_id > 0").Delete(&models.TechnologyList{})
+func DeleteAllServices(c *fiber.Ctx) error {
+	// Delete all TechnologyLists first
+	result := config.DB.Where("service_id > 0").Unscoped().Delete(&models.TechnologyList{})
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": "Could not delete technology lists",
@@ -98,8 +98,8 @@ func DeleteAllServies(c *fiber.Ctx) error {
 		})
 	}
 
-	// Hapus semua services
-	result = config.DB.Where("id > 0").Delete(&models.Service{})
+	// Delete all services
+	result = config.DB.Where("id > 0").Unscoped().Delete(&models.Service{})
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": "Could not delete services",
