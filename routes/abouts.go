@@ -7,10 +7,10 @@ import (
 )
 
 func SetupAboutsRoutes(app *fiber.App) {
-	api := app.Group("/api")
+	api := app.Group("/admin")
 
 	// get abouts
-	api.Get("/abouts", controllers.GetAbouts)
+	api.Get("/abouts", middleware.JWTProtected(), controllers.GetAbouts)
 
 	// create or update abouts
 	api.Put("/abouts", middleware.JWTProtected(), controllers.CreateOrUpdateAbouts)

@@ -7,10 +7,10 @@ import (
 )
 
 func SetupContactsRoutes(app *fiber.App) {
-	api := app.Group("/api")
+	api := app.Group("/admin")
 
 	// get contacts
-	api.Get("/contacts", controllers.GetContacts)
+	api.Get("/contacts", middleware.JWTProtected(), controllers.GetContacts)
 
 	// create or update contacts
 	api.Put("/contacts", middleware.JWTProtected(), controllers.CreateOrUpdateContacts)

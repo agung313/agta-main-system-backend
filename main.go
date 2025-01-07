@@ -50,6 +50,7 @@ func main() {
 	routes.SetupMessagesRoutes(app)
 	routes.SetupVisitorRoutes(app)
 	routes.SetupDashboardAdminRoutes(app)
+	routes.SetupClientRoutes(app)
 	routes.UploadRoute(app)
 
 	port := os.Getenv("APP_PORT")

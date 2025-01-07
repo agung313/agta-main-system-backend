@@ -7,9 +7,8 @@ import (
 )
 
 func SetupMessagesRoutes(app *fiber.App) {
-	api := app.Group("/api")
+	api := app.Group("/admin")
 	api.Get("/messages", middleware.JWTProtected(), controllers.GetMessages)
-	api.Post("/messages", controllers.CreateMessage)
 	api.Delete("/message/:id", middleware.JWTProtected(), controllers.DeleteMessageById)
 	api.Delete("/messages", middleware.JWTProtected(), controllers.PermanentDeleteAllMessages)
 }

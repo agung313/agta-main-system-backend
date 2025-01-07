@@ -7,7 +7,7 @@ import (
 )
 
 func SetupSloganRoutes(app *fiber.App) {
-	api := app.Group("/api")
+	api := app.Group("/admin")
 
 	// get slogan
 	api.Get("/slogan", controllers.GetSlogan)

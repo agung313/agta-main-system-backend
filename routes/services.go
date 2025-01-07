@@ -7,10 +7,10 @@ import (
 )
 
 func SetupServicesRoutes(app *fiber.App) {
-	api := app.Group("/api")
+	api := app.Group("/admin")
 
 	// get services
-	api.Get("/services", controllers.GetServices)
+	api.Get("/services", middleware.JWTProtected(), controllers.GetServices)
 
 	// create or update services
 	api.Put("/services", middleware.JWTProtected(), controllers.CreateOrUpdateServices)

@@ -7,6 +7,6 @@ import (
 )
 
 func SetupDashboardAdminRoutes(app *fiber.App) {
-	api := app.Group("/api/")
+	api := app.Group("/admin")
 	api.Get("/dashboard", middleware.JWTProtected(), controllers.GetDashboardAdmin)
 }

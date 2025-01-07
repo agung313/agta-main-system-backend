@@ -7,15 +7,9 @@ import (
 )
 
 func SetupUserRoutes(app *fiber.App) {
-	api := app.Group("/api")
+	api := app.Group("/admin")
 
 	// aut routes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-	// signup
-	api.Post("/signup", controllers.SignUp)
-
-	// login
-	api.Post("/login", controllers.Login)
 
 	// logout
 	api.Post("/logout", controllers.Logout)
