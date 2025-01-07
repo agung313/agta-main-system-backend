@@ -30,9 +30,9 @@ func UploadImage(c *fiber.Ctx) error {
 	// Save the file:
 	for _, file := range files {
 		// Check if the file is an image:
-		if file.Header.Get("Content-Type") != "image/jpeg" && file.Header.Get("Content-Type") != "image/png" {
+		if file.Header.Get("Content-Type") != "image/jpeg" && file.Header.Get("Content-Type") != "image/png" && file.Header.Get("Content-Type") != "image/svg+xml" {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-				"error": "Only JPEG and PNG images are allowed",
+				"error": "Only JPEG, PNG, and SVG images are allowed",
 			})
 		}
 
