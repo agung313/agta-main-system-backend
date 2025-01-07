@@ -16,7 +16,12 @@ func GetSlogan(c *fiber.Ctx) error {
 	}
 	return c.JSON(fiber.Map{
 		"message": "Get slogan success",
-		"data":    slogan[0],
+		"data": map[string]interface{}{
+			"firstText":   slogan[0].FirstText,
+			"secondText":  slogan[0].SecondText,
+			"thirdText":   slogan[0].ThirdText,
+			"description": slogan[0].Description,
+		},
 	})
 }
 

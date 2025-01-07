@@ -10,7 +10,7 @@ func SetupSloganRoutes(app *fiber.App) {
 	api := app.Group("/api")
 
 	// get slogan
-	api.Get("/slogan", middleware.JWTProtected(), controllers.GetSlogan)
+	api.Get("/slogan", controllers.GetSlogan)
 
 	// create slogan
 	api.Put("/slogan", middleware.JWTProtected(), controllers.CreateOrUpdateSlogan)
