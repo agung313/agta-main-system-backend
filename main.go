@@ -45,6 +45,7 @@ func main() {
 	routes.SetupAboutsRoutes(app)
 	routes.SetupContactsRoutes(app)
 	routes.SetupServicesRoutes(app)
+	routes.UploadRoute(app)
 
 	port := os.Getenv("APP_PORT")
 	log.Fatal(app.Listen(":" + port))
