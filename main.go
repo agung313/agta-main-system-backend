@@ -35,6 +35,8 @@ func main() {
 		&models.About{},
 		&models.ComitmentList{},
 		&models.Contacts{},
+		&models.Service{},
+		&models.TechnologyList{},
 	)
 
 	// Routes
@@ -42,6 +44,7 @@ func main() {
 	routes.SetupSloganRoutes(app)
 	routes.SetupAboutsRoutes(app)
 	routes.SetupContactsRoutes(app)
+	routes.SetupServicesRoutes(app)
 
 	port := os.Getenv("APP_PORT")
 	log.Fatal(app.Listen(":" + port))
