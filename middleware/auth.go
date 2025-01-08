@@ -91,14 +91,14 @@ func JWTProtectedAdmin() fiber.Handler {
 		config.DB.Find(&tokenAdmin)
 
 		for _, t := range tokenAdmin {
-			if t.Token != tokenString {
-				return c.Status(401).JSON(fiber.Map{
-					"message": "Unauthorized",
-				})
+			if t.Token == tokenString {
+				c.Locals("user", token.Claims)
+				return c.Next()
 			}
 		}
 
-		c.Locals("user", token.Claims)
-		return c.Next()
+		return c.Status(401).JSON(fiber.Map{
+			"message": "Unauthorized",
+		})
 	}
 }
