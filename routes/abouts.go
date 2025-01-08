@@ -13,8 +13,8 @@ func SetupAboutsRoutes(app *fiber.App) {
 	api.Get("/abouts", middleware.JWTProtected(), controllers.GetAbouts)
 
 	// create or update abouts
-	api.Put("/abouts", middleware.JWTProtected(), controllers.CreateOrUpdateAbouts)
+	api.Put("/abouts", middleware.JWTProtectedAdmin(), controllers.CreateOrUpdateAbouts)
 
 	// delete abouts
-	api.Delete("/abouts", middleware.JWTProtected(), controllers.DeleteAllAbouts)
+	api.Delete("/abouts", middleware.JWTProtectedAdmin(), controllers.DeleteAllAbouts)
 }

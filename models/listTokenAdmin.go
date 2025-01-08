@@ -2,7 +2,7 @@ package models
 
 import "gorm.io/gorm"
 
-type Blacklist struct {
+type TokenAdmin struct {
 	gorm.Model
 	Token string `gorm:"unique"`
 }

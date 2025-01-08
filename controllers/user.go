@@ -50,6 +50,11 @@ func Login(c *fiber.Ctx) error {
 		})
 	}
 
+	if user.Role == "superAdmin" {
+		listTokenAdmin := models.TokenAdmin{Token: tokenString}
+		config.DB.Create(&listTokenAdmin)
+	}
+
 	return c.JSON(fiber.Map{
 		"message": "Login successful",
 		"token":   tokenString,
@@ -90,6 +95,11 @@ func SignUp(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{
 			"message": "Could not create user",
 		})
+	}
+
+	if user.Role == "superAdmin" {
+		listTokenAdmin := models.TokenAdmin{Token: tokenString}
+		config.DB.Create(&listTokenAdmin)
 	}
 
 	return c.JSON(fiber.Map{
@@ -157,6 +167,34 @@ func DeleteAllBlacklistTokens(c *fiber.Ctx) error {
 	}
 	return c.JSON(fiber.Map{
 		"message": "Success permanently deleted all blacklist tokens",
+		"total":   result.RowsAffected,
+	})
+}
+
+func GetListTokenAdmin(c *fiber.Ctx) error {
+	var listTokenAdmin []models.TokenAdmin
+	result := config.DB.Find(&listTokenAdmin)
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": result.Error,
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message": "Success get all list token admin",
+		"total":   result.RowsAffected,
+		"data":    listTokenAdmin,
+	})
+}
+
+func DeleteAllListTokenAdmin(c *fiber.Ctx) error {
+	result := config.DB.Unscoped().Where("1 = 1").Delete(&models.TokenAdmin{})
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": result.Error,
+		})
+	}
+	return c.JSON(fiber.Map{
+		"message": "Success permanently deleted all list token admin",
 		"total":   result.RowsAffected,
 	})
 }

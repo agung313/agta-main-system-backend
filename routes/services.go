@@ -13,8 +13,8 @@ func SetupServicesRoutes(app *fiber.App) {
 	api.Get("/services", middleware.JWTProtected(), controllers.GetServices)
 
 	// create or update services
-	api.Put("/services", middleware.JWTProtected(), controllers.CreateOrUpdateServices)
+	api.Put("/services", middleware.JWTProtectedAdmin(), controllers.CreateOrUpdateServices)
 
 	// delete services
-	api.Delete("/services", middleware.JWTProtected(), controllers.DeleteAllServices)
+	api.Delete("/services", middleware.JWTProtectedAdmin(), controllers.DeleteAllServices)
 }

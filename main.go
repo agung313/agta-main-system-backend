@@ -32,6 +32,7 @@ func main() {
 		&models.User{},
 		&models.Slogan{},
 		&models.Blacklist{},
+		&models.TokenAdmin{},
 		&models.About{},
 		&models.ComitmentList{},
 		&models.Contacts{},

@@ -8,6 +8,6 @@ import (
 
 func SetupVisitorRoutes(app *fiber.App) {
 	api := app.Group("/admin")
-	api.Get("/visitors", middleware.JWTProtected(), controllers.GetVisitors)
-	api.Delete("/visitors", middleware.JWTProtected(), controllers.DeleteAllVisitors)
+	api.Get("/visitors", middleware.JWTProtectedAdmin(), controllers.GetVisitors)
+	api.Delete("/visitors", middleware.JWTProtectedAdmin(), controllers.DeleteAllVisitors)
 }

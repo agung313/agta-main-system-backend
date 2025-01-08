@@ -9,8 +9,8 @@ import (
 
 func UploadRoute(app *fiber.App) {
 	api := app.Group("/admin")
-	api.Post("/uploadImage", middleware.JWTProtected(), controllers.UploadImage)
-	api.Delete("/deleteImage", middleware.JWTProtected(), controllers.DeleteImage)
+	api.Post("/uploadImage", middleware.JWTProtectedAdmin(), controllers.UploadImage)
+	api.Delete("/deleteImage", middleware.JWTProtectedAdmin(), controllers.DeleteImage)
 	app.Static("/uploads", "./uploads")
 
 }

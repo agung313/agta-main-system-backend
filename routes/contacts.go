@@ -13,8 +13,8 @@ func SetupContactsRoutes(app *fiber.App) {
 	api.Get("/contacts", middleware.JWTProtected(), controllers.GetContacts)
 
 	// create or update contacts
-	api.Put("/contacts", middleware.JWTProtected(), controllers.CreateOrUpdateContacts)
+	api.Put("/contacts", middleware.JWTProtectedAdmin(), controllers.CreateOrUpdateContacts)
 
 	// delete contacts
-	api.Delete("/contacts", middleware.JWTProtected(), controllers.DeleteContacts)
+	api.Delete("/contacts", middleware.JWTProtectedAdmin(), controllers.DeleteContacts)
 }
