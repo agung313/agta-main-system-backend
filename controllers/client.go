@@ -25,11 +25,22 @@ func GetDashboard(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Get slogan success",
 		"data": map[string]interface{}{
-			"firstText":       slogan[0].FirstText,
-			"secondText":      slogan[0].SecondText,
-			"thirdText":       slogan[0].ThirdText,
-			"description":     slogan[0].Description,
-			"technologyLists": technologyLists,
+			"firstText":   slogan[0].FirstText,
+			"secondText":  slogan[0].SecondText,
+			"thirdText":   slogan[0].ThirdText,
+			"description": slogan[0].Description,
+			"technologyLists": func() []map[string]interface{} {
+				var result []map[string]interface{}
+				for _, tech := range technologyLists {
+					result = append(result, map[string]interface{}{
+						"icont":       tech.Icont,
+						"link":        tech.Link,
+						"title":       tech.Title,
+						"description": tech.Description,
+					})
+				}
+				return result
+			}(),
 		},
 	})
 }
