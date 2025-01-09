@@ -61,11 +61,22 @@ func GetDashboardAdmin(c *fiber.Ctx) error {
 		}
 	}
 
+	uniqueCountries := make(map[int]map[int]map[string]bool)
 	for _, visitor := range visitors {
 		year := visitor.CreatedAt.Year()
-		month := visitor.CreatedAt.Month()
-		if _, ok := data[year]; ok {
-			data[year][month-1]["Countries"] = data[year][month-1]["Countries"].(int) + 1
+		month := int(visitor.CreatedAt.Month())
+		country := visitor.Countries
+		if _, ok := uniqueCountries[year]; !ok {
+			uniqueCountries[year] = make(map[int]map[string]bool)
+		}
+		if _, ok := uniqueCountries[year][month]; !ok {
+			uniqueCountries[year][month] = make(map[string]bool)
+		}
+		if _, ok := uniqueCountries[year][month][country]; !ok {
+			uniqueCountries[year][month][country] = true
+			if _, ok := data[year]; ok {
+				data[year][month-1]["Countries"] = data[year][month-1]["Countries"].(int) + 1
+			}
 		}
 	}
 
