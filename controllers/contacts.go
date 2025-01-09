@@ -22,10 +22,16 @@ func GetContacts(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Get contacts success",
 		"data": map[string]interface{}{
+			"title": map[string]string{
+				"id": "KONTAK",
+				"en": "CONTACT",
+			},
 			"email":          contacts[0].Email,
 			"instagram":      contacts[0].Instagram,
 			"linkedin":       contacts[0].Linkedin,
+			"linkedinLink":   contacts[0].LinkedinLink,
 			"address":        contacts[0].Address,
+			"addressLink":    contacts[0].AddressLink,
 			"googleMapsLink": contacts[0].GoogleMapsLink,
 		},
 	})

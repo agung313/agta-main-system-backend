@@ -7,6 +7,8 @@ type Contacts struct {
 	Email          string `json:"email"`
 	Instagram      string `json:"instagram"`
 	Linkedin       string `json:"linkedin"`
+	LinkedinLink   string `json:"linkedinLink"`
 	Address        string `json:"address"`
+	AddressLink    string `json:"addressLink"`
 	GoogleMapsLink string `json:"googleMapsLink"`
 }

@@ -29,6 +29,7 @@ func GetAbouts(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Get abouts success",
 		"data": map[string]interface{}{
+			"title":          "AGTA",
 			"openingText":    abouts[0].OpeningText,
 			"closingText":    abouts[0].ClosingText,
 			"comitmentLists": comitmentLists,

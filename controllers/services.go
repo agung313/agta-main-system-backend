@@ -31,6 +31,10 @@ func GetServices(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Get services success",
 		"data": map[string]interface{}{
+			"title": map[string]string{
+				"id": "LAYANAN",
+				"en": "SERVICES",
+			},
 			"description":     services[0].Description,
 			"technologyLists": technologyLists,
 		},
