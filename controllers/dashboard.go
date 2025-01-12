@@ -81,10 +81,10 @@ func GetDashboardAdmin(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(fiber.Map{
-		"message":         "Success get all visitors",
-		"totalVisitors":   totalVisitors,
-		"totalMessages":   totalMessages,
-		"totalCountriess": totalCountries,
-		"data":            data,
+		"message":        "Success get all visitors",
+		"totalVisitors":  totalVisitors,
+		"totalMessages":  totalMessages,
+		"totalCountries": totalCountries,
+		"data":           data,
 	})
 }
