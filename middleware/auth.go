@@ -13,7 +13,7 @@ func JWTProtected() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		authHeader := c.Get("Authorization")
 		if authHeader == "" {
-			return c.Status(401).JSON(fiber.Map{
+			return c.Status(400).JSON(fiber.Map{
 				"message": "Missing or malformed JWT",
 			})
 		}
@@ -28,7 +28,7 @@ func JWTProtected() fiber.Handler {
 
 		if err != nil || !token.Valid {
 			log.Println("Token Error:", err)
-			return c.Status(401).JSON(fiber.Map{
+			return c.Status(400).JSON(fiber.Map{
 				"message": "Invalid or expired JWT",
 			})
 		}
@@ -39,7 +39,7 @@ func JWTProtected() fiber.Handler {
 
 		for _, t := range tokens {
 			if t.Token == tokenString {
-				return c.Status(401).JSON(fiber.Map{
+				return c.Status(400).JSON(fiber.Map{
 					"message": "Token is blacklisted",
 				})
 			}
@@ -54,7 +54,7 @@ func JWTProtectedAdmin() fiber.Handler {
 	return func(c *fiber.Ctx) error {
 		authHeader := c.Get("Authorization")
 		if authHeader == "" {
-			return c.Status(401).JSON(fiber.Map{
+			return c.Status(400).JSON(fiber.Map{
 				"message": "Missing or malformed JWT",
 			})
 		}
@@ -69,7 +69,7 @@ func JWTProtectedAdmin() fiber.Handler {
 
 		if err != nil || !token.Valid {
 			log.Println("Token Error:", err)
-			return c.Status(401).JSON(fiber.Map{
+			return c.Status(400).JSON(fiber.Map{
 				"message": "Invalid or expired JWT",
 			})
 		}
@@ -80,7 +80,7 @@ func JWTProtectedAdmin() fiber.Handler {
 
 		for _, t := range tokens {
 			if t.Token == tokenString {
-				return c.Status(401).JSON(fiber.Map{
+				return c.Status(400).JSON(fiber.Map{
 					"message": "Token is blacklisted",
 				})
 			}
@@ -97,7 +97,7 @@ func JWTProtectedAdmin() fiber.Handler {
 			}
 		}
 
-		return c.Status(401).JSON(fiber.Map{
+		return c.Status(400).JSON(fiber.Map{
 			"message": "Unauthorized",
 		})
 	}
