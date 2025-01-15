@@ -27,13 +27,13 @@ func Login(c *fiber.Ctx) error {
 	var user models.User
 	result := config.DB.Where("email = ?", input.Email).First(&user)
 	if result.Error != nil {
-		return c.Status(401).JSON(fiber.Map{
+		return c.Status(400).JSON(fiber.Map{
 			"message": "Invalid email or password",
 		})
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password)); err != nil {
-		return c.Status(401).JSON(fiber.Map{
+		return c.Status(400).JSON(fiber.Map{
 			"message": "Invalid email or password",
 		})
 	}
