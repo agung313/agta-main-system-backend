@@ -59,5 +59,5 @@ func SetupUserRoutes(app *fiber.App) {
 	api.Get("/user/:id", middleware.JWTProtected(), controllers.GetUser)
 
 	// update user by id
-	api.Put("/user/:id", middleware.JWTProtected(), controllers.UpdateUser)
+	api.Put("/user/:email", middleware.JWTProtected(), controllers.UpdateUser)
 }

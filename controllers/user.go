@@ -283,14 +283,17 @@ func CreateUser(c *fiber.Ctx) error {
 }
 
 func UpdateUser(c *fiber.Ctx) error {
-	id := c.Params("id")
+	email := c.Params("email")
 	user := new(models.User)
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(400).JSON(fiber.Map{
 			"message": err,
 		})
 	}
-	result := config.DB.Model(&user).Where("id = ?", id).Updates(&user)
+	if user.Role != "superAdmin" {
+		user.Role = "visitor"
+	}
+	result := config.DB.Model(&user).Where("email = ?", email).Updates(&user)
 	if result.Error != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"message": result.Error,
