@@ -430,7 +430,7 @@ func ResetPassword(c *fiber.Ctx) error {
 	m.SetHeader("From", "systembyagta@gmail.com")
 	m.SetHeader("To", user.Email)
 	m.SetHeader("Subject", "Password Reset")
-	m.SetBody("text/plain", "Your password has been reset to: "+newPassword)
+	m.SetBody("text/plain", "Dear User,\n\nYour password has been successfully reset. Your new password is: "+newPassword+"\n\nPlease make sure to change your password after logging in for security reasons.\n\nBest regards,\nSystem by AGTA")
 	d := gomail.NewDialer("smtp.gmail.com", 587, "systembyagta@gmail.com", os.Getenv("SMPT_PASSWORD"))
 
 	if err := d.DialAndSend(m); err != nil {
