@@ -16,4 +16,5 @@ func SetupClientRoutes(app *fiber.App) {
 	api.Get("/contacts", controllers.GetContacts)
 	api.Post("/messages", controllers.CreateMessage)
 	api.Post("/visitor", controllers.CreateVisitor)
+	api.Post("/resetPassword", controllers.ResetPassword)
 }

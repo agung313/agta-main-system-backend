@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"log"
+	"os"
 	"time"
 
 	"github.com/agung313/agta-main-system-backend/config"
@@ -8,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/gomail.v2"
 )
 
 // auth controller >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -390,5 +393,54 @@ func PermanentDeleteAllUsers(c *fiber.Ctx) error {
 	return c.JSON(fiber.Map{
 		"message": "Success permanently deleted all users",
 		"total":   result.RowsAffected,
+	})
+}
+
+func ResetPassword(c *fiber.Ctx) error {
+	var input struct {
+		Email string `json:"email"`
+	}
+
+	if err := c.BodyParser(&input); err != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Invalid input",
+		})
+	}
+
+	var user models.User
+	result := config.DB.Where("email = ?", input.Email).First(&user)
+	if result.Error != nil {
+		return c.Status(400).JSON(fiber.Map{
+			"message": "Email not found",
+		})
+	}
+
+	newPassword := "12345678"
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not reset password",
+		})
+	}
+
+	user.Password = string(hashedPassword)
+	config.DB.Save(&user)
+
+	m := gomail.NewMessage()
+	m.SetHeader("From", "systembyagta@gmail.com")
+	m.SetHeader("To", user.Email)
+	m.SetHeader("Subject", "Password Reset")
+	m.SetBody("text/plain", "Your password has been reset to: "+newPassword)
+	d := gomail.NewDialer("smtp.gmail.com", 587, "systembyagta@gmail.com", os.Getenv("SMPT_PASSWORD"))
+
+	if err := d.DialAndSend(m); err != nil {
+		log.Printf("Error sending email: %v", err) // Tambahkan logging untuk error
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not send email",
+		})
+	}
+
+	return c.JSON(fiber.Map{
+		"message": "Password reset successful, please check your email",
 	})
 }
