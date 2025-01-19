@@ -307,7 +307,17 @@ func UpdateUser(c *fiber.Ctx) error {
 	}
 	return c.JSON(fiber.Map{
 		"message": "Success update user's data",
-		"data":    user,
+		"userData": map[string]interface{}{
+			"username": user.Username,
+			"email":    user.Email,
+			"name":     user.Name,
+			"role": func() interface{} {
+				if user.Role == "superAdmin" {
+					return user.Role
+				}
+				return nil
+			}(),
+		},
 	})
 }
 
