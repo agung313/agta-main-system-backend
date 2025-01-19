@@ -115,8 +115,18 @@ func SignUp(c *fiber.Ctx) error {
 
 	return c.JSON(fiber.Map{
 		"message": "Success create new user",
-		"data":    user,
 		"token":   tokenString,
+		"userData": map[string]interface{}{
+			"username": user.Username,
+			"email":    user.Email,
+			"name":     user.Name,
+			"role": func() interface{} {
+				if user.Role == "superAdmin" {
+					return user.Role
+				}
+				return nil
+			}(),
+		},
 	})
 }
 
