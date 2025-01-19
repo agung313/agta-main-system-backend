@@ -62,6 +62,12 @@ func Login(c *fiber.Ctx) error {
 			"username": user.Username,
 			"email":    user.Email,
 			"name":     user.Name,
+			"role": func() interface{} {
+				if user.Role == "superAdmin" {
+					return user.Role
+				}
+				return nil
+			}(),
 		},
 	})
 }
