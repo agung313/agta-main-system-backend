@@ -416,14 +416,8 @@ func ResetPassword(c *fiber.Ctx) error {
 	}
 
 	newPassword := "12345678"
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newPassword), bcrypt.DefaultCost)
-	if err != nil {
-		return c.Status(500).JSON(fiber.Map{
-			"message": "Could not reset password",
-		})
-	}
 
-	user.Password = string(hashedPassword)
+	user.Password = string(newPassword)
 	config.DB.Save(&user)
 
 	m := gomail.NewMessage()
