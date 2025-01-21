@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"log"
+	"os"
 	"time"
 
 	"github.com/agung313/agta-main-system-backend/config"
@@ -8,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
+	"gopkg.in/gomail.v2"
 )
 
 // auth controller >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -443,19 +446,19 @@ func ResetPassword(c *fiber.Ctx) error {
 	user.Password = string(newPassword)
 	config.DB.Save(&user)
 
-	// m := gomail.NewMessage()
-	// m.SetHeader("From", "systembyagta@gmail.com")
-	// m.SetHeader("To", user.Email)
-	// m.SetHeader("Subject", "Password Reset")
-	// m.SetBody("text/plain", "Dear User,\n\nYour password has been successfully reset. Your new password is: "+newPassword+"\n\nPlease make sure to change your password after logging in for security reasons.\n\nBest regards,\nSystem by AGTA")
-	// d := gomail.NewDialer("smtp.gmail.com", 587, "systembyagta@gmail.com", os.Getenv("SMPT_PASSWORD"))
+	m := gomail.NewMessage()
+	m.SetHeader("From", "systembyagta@gmail.com")
+	m.SetHeader("To", user.Email)
+	m.SetHeader("Subject", "Password Reset")
+	m.SetBody("text/plain", "Dear User,\n\nYour password has been successfully reset. Your new password is: "+newPassword+"\n\nPlease make sure to change your password after logging in for security reasons.\n\nBest regards,\nSystem by AGTA")
+	d := gomail.NewDialer("smtp.gmail.com", 587, "systembyagta@gmail.com", os.Getenv("SMPT_PASSWORD"))
 
-	// if err := d.DialAndSend(m); err != nil {
-	// 	log.Printf("Error sending email: %v", err) // Tambahkan logging untuk error
-	// 	return c.Status(500).JSON(fiber.Map{
-	// 		"message": "Could not send email",
-	// 	})
-	// }
+	if err := d.DialAndSend(m); err != nil {
+		log.Printf("Error sending email: %v", err) // Tambahkan logging untuk error
+		return c.Status(500).JSON(fiber.Map{
+			"message": "Could not send email",
+		})
+	}
 
 	return c.JSON(fiber.Map{
 		"message": "Password reset successful, please check your email",
