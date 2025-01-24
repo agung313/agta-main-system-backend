@@ -6,15 +6,13 @@ import (
 )
 
 func SetupClientRoutes(app *fiber.App) {
-	api := app.Group("/client")
-
-	api.Post("/signup", controllers.SignUp)
-	api.Post("/login", controllers.Login)
-	api.Get("/dashboard", controllers.GetDashboard)
-	api.Get("/abouts", controllers.GetAbouts)
-	api.Get("/services", controllers.GetServices)
-	api.Get("/contacts", controllers.GetContacts)
-	api.Post("/messages", controllers.CreateMessage)
-	api.Post("/visitor", controllers.CreateVisitor)
-	api.Post("/resetPassword", controllers.ResetPassword)
+	app.Post("/signup", controllers.SignUp)
+	app.Post("/login", controllers.Login)
+	app.Get("/dashboard", controllers.GetDashboard)
+	app.Get("/abouts", controllers.GetAbouts)
+	app.Get("/services", controllers.GetServices)
+	app.Get("/contacts", controllers.GetContacts)
+	app.Post("/messages", controllers.CreateMessage)
+	app.Post("/visitor", controllers.CreateVisitor)
+	app.Post("/resetPassword", controllers.ResetPassword)
 }
